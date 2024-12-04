@@ -48,7 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-  <section class="container">
+
+
+
+  <section id="content" class="container" >
 
     <div class="image-section">
       <div class="image-wrapper">
@@ -102,6 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       window.onload =mudaImagem;
       window.onresize = mudaImagem;
     }
+    
+    
+
   </script>
 </body>
 

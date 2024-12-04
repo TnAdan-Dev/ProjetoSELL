@@ -2,7 +2,7 @@
 
 $base_url = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
 $base_url .= "://" . $_SERVER['HTTP_HOST'];
-$base_url .= "/TCC_ProjectSell/ProjetoSELL/";  // Ajuste para incluir o caminho até a pasta do projeto
+$base_url .= "/ProjetoSELL";  
 
 
 
@@ -262,7 +262,7 @@ $clienteLogado = isset($_SESSION['idcliente']);
           <div class="ml-4 flex lg:ml-0">
             <a href="<?php echo $base_url; ?>/index.php">
               <span class="sr-only">Joyce Galvão Modas</span>
-              <img class="h-8 w-auto hover:scale-105 hover:drop-shadow-2xl transition-all duration-300" src="<?php echo $base_url; ?>/img/iconJGM.png" alt="">
+              <img class="h-8 w-auto hover:scale-105 hover:drop-shadow-2xl transition-all duration-300" src="<?= $base_url; ?>/img/iconJGM.png" alt="">
             </a>
           </div>
 
@@ -488,7 +488,7 @@ $clienteLogado = isset($_SESSION['idcliente']);
                   <div class="dropdown">
                     <div tabindex="0" role="button" class="hover:scale-105 transition-all duration-300"><img src="<?php echo $base_url; ?>/img/do-utilizador.png" alt=""></div>
                     <ul tabindex="0" class="dropdown-content menu bg-white rounded-box z-[1] w-52 p-2 shadow">
-                      <li><a href="../pages/perfil.php">Perfil</a></li>
+                      <li><a href="<?= $base_url ?>/pages/perfil.php">Perfil</a></li>
                       <hr>
                       <li><a href="<?php echo $base_url; ?>/backend/sessionclear.php" class=" text-red-600">Sair</a></li>
                     </ul>

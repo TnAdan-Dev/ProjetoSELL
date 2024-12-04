@@ -1,8 +1,12 @@
 <?php
 session_start();
-// include '../backend/conexao.php';
+if (!isset($_SESSION['idcliente'])) {
+    header('Location: login.php');
+    exit;
+}
+include '../backend/conexao.php';
 
-// $conn = novaConexao();
+$conn = novaConexao();
 
 
 // Verifica se o ID do produto está na URL
@@ -13,10 +17,36 @@ session_start();
 //     echo "O ID do produto é: " . $idProduto;
 
 //     // Prepara a consulta para pegar o produto do banco de dados
-//     $query = "SELECT * FROM tbl_produto WHERE id_produto = :idproduto";
-//     $stmt = $conn->prepare($query);
-//     $stmt->bindValue(':idproduto', $idProduto, PDO::PARAM_INT);
-//     $stmt->execute();
+
+$query = "
+    SELECT p.* 
+    FROM tbl_produto p
+    JOIN tbl_detalhe_carrinho dc ON dc.det_id_produto = p.id_produto
+    WHERE dc.det_id_carrinho = (
+        SELECT id_carrinho 
+        FROM tbl_carrinho 
+        WHERE car_id_cliente = :idcliente
+        LIMIT 1
+    )
+";
+$stmt = $conn->prepare($query);
+$stmt->bindValue(':idcliente', $_SESSION['idcliente'], PDO::PARAM_INT);
+$stmt->execute();
+
+// Obtendo os resultados
+$produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Exibindo os resultados
+// if ($produtos) {
+//     foreach ($produtos as $produto) {
+//         echo "Nome do Produto: " . $produto['pro_nome'] . "<br>";
+//         echo "Preço: " . $produto['pro_preco'] . "<br>";
+//         echo "Descrição: " . $produto['pro_marca'] . "<br>";
+//         // Você pode adicionar mais campos do produto aqui, conforme necessário
+//     }
+// } else {
+//     echo "Nenhum produto encontrado no carrinho.";
+// }
 
 //     // Busca o produto do banco de dados
 //     $produto = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -54,8 +84,8 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seu carrinho</title>
-    <link rel="stylesheet" href="../../css/output.css">
-    <link rel="icon" href="../../img/iconJGM.png">
+    <link rel="stylesheet" href="../css/output.css">
+    <link rel="icon" href="../img/iconJGM.png">
 
 </head>
 
@@ -66,47 +96,119 @@ session_start();
     <div class="container mx-auto mt-10">
         <div class="flex flex-wrap md:flex-nowrap">
             <div class="w-full md:w-2/3 p-4">
-                <h2 class="text-2xl font-bold mb-5">Shopping Cart</h2>
-                <!-- Product Card -->
-                <div class="flex items-start mb-4">
-                    <img src="" alt="Basic Tee Sienna" class="w-24 h-24 mr-4">
-                    <div class="flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-lg font-bold">Basic Tee</h3>
-                            <p class="text-gray-700">Sienna | Large</p>
-                            <p class="text-gray-900 font-semibold">$32.00</p>
+                <h2 class="text-2xl font-bold mb-5">Seu Carrinho</h2>
+
+                <?php if ($produtos) {
+                    foreach ($produtos as $produto) {
+                ?>
+                        <div class="flex items-start mb-4 border-2 p-3 shadow-xl rounded-xl">
+                            <img src="../img/camisetaTeste.webp" alt="Basic Tee Sienna" class="w-24 h-24 mr-4">
+                            <div class="flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-lg font-bold"><?= $produto['pro_nome'] ?></h3>
+                                    <p class="text-gray-700">dane-se</p>
+                                    <p class="text-base-900 font-semibold">R$<?= $produto['pro_preco'] ?></p>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <select class="select select-error">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                    </select>
+                                    <span class="text-sm text-green-500">Em Estoque</span>
+                                </div>
+                            </div>
+                            <button class="ml-auto text-base-100 font-bold text-xl">×</button>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <select class="border p-1 rounded">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                            </select>
-                            <span class="text-sm text-green-500">In stock</span>
-                        </div>
-                    </div>
-                    <button class="ml-auto text-gray-700 font-bold text-xl">×</button>
-                </div>
+                <?php
+                    }
+                } else {
+                    echo "Nenhum produto encontrado no carrinho.";
+                } ?>
+
             </div>
-            <div class="w-full md:w-1/3 p-4 bg-gray-100">
-                <h2 class="text-xl font-bold mb-3">Order summary</h2>
+            <div class="card bg-base-100 w-96 shadow-xl p-5">
+                <h2 class="text-xl font-bold mb-3">Resumo da Compra</h2>
                 <div class="flex justify-between mb-2">
                     <span>Subtotal</span>
-                    <span>$99.00</span>
+                    <span>R$99.00</span>
                 </div>
                 <div class="flex justify-between mb-2">
-                    <span>Shipping estimate</span>
-                    <span>$5.00</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span>Tax estimate</span>
-                    <span>$8.32</span>
+                    <span>Envio Estimado</span>
+                    <span>R$5.00</span>
                 </div>
                 <div class="flex justify-between font-bold text-lg mb-5">
-                    <span>Order total</span>
+                    <span>Total da compra</span>
                     <span>$112.32</span>
                 </div>
-                <button class="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600">Checkout</button>
+                <button class="w-full bg-myprimary text-white p-3 rounded hover:bg-mysecondary transition-all duration-300 hover:text-black">Checkout</button>
+            </div>
+        </div>
+    </div>
+    <div class="container mx-auto px-4 py-6">
+        <h1 class="text-myprimary font-bold text-3xl">Produtos Populares</h1>
+        <div class="overflow-x-auto p-10">
+            <div class="flex space-x-16 min-w-max ">
+                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border  ">
+                    <figure>
+                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
+                    </figure>
+                    <div class="card-body text-black">
+                        <h2 class="card-title text-black">Item</h2>
+                        <p>Descrição/preço do item</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn bg-myprimary hover:bg-mysecondary text-white hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
+                    <figure>
+                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
+                    </figure>
+                    <div class="card-body text-black">
+                        <h2 class="card-title text-black">Item</h2>
+                        <p>Descrição/preço do item</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
+                    <figure>
+                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
+                    </figure>
+                    <div class="card-body text-black">
+                        <h2 class="card-title text-black">Item</h2>
+                        <p>Descrição/preço do item</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
+                    <figure>
+                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
+                    </figure>
+                    <div class="card-body text-black">
+                        <h2 class="card-title text-black">Item</h2>
+                        <p>Descrição/preço do item</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
+                    <figure>
+                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
+                    </figure>
+                    <div class="card-body text-black">
+                        <h2 class="card-title text-black">Item</h2>
+                        <p>Descrição/preço do item</p>
+                        <div class="card-actions justify-end">
+                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

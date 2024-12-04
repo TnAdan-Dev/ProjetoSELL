@@ -108,8 +108,8 @@ $clienteLogado = isset($_SESSION['idcliente']);
   <div class="container mx-auto px-4 py-6">
   <h1 class="text-myprimary font-bold text-3xl">Produtos Populares</h1>
     <div class="overflow-x-auto p-10">
-      <div class="flex space-x-16 min-w-max">
-        <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border">
+      <div class="flex space-x-16 min-w-max ">
+        <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border  ">
           <figure>
             <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
           </figure>
@@ -173,6 +173,7 @@ $clienteLogado = isset($_SESSION['idcliente']);
     </div>
   </div>
 
+  <div class="opacity-0 animate-fade-in">Conteúdo carregado!</div>
 
   <?php
 

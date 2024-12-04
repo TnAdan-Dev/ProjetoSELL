@@ -7,6 +7,11 @@ $base_url = rtrim($base_url, '/pages/aliancas');
 
 $clienteLogado = isset($_SESSION['idcliente']);
 
+if (!isset($_SESSION['idcliente'])) {
+    header('Location: ../index.php'); 
+    exit;
+  } 
+
 
 ?>
 <!DOCTYPE html>
@@ -18,10 +23,19 @@ $clienteLogado = isset($_SESSION['idcliente']);
     <link rel="stylesheet" href="../css/output.css">
 </head>
 <body>
-    
-<?php  require_once '../utils/navbar.php'; ?>
 
-    <a href="gerente/index.php">teste</a>
+<?php  require_once '../utils/navbar.php'; ?>
+<div >
+    <div class="avatar placeholder">
+      <div class="bg-neutral text-neutral-content w-24 rounded-full">
+        <span class="text-3xl">D</span>
+      </div>
+    </div>
+</div>
+
+
+
+    <a href="gerente/index.php">pagina gerente</a>
 
 <?php  require_once '../utils/footer.php'; ?>
 </body>
