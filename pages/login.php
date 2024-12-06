@@ -1,37 +1,39 @@
 <?php
-  session_start();
-  if (isset($_SESSION['idcliente'])) {
-    header('Location: ../index.php'); 
-    exit;
-  } 
+session_start();
+if (isset($_SESSION['idcliente'])) {
+  header('Location: ../index.php');
+  exit;
+}
 
-  include '../backend/conexao.php';
+include '../backend/conexao.php';
+
+$loginErro = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
+  $email = $_POST['email'];
+  $senha = $_POST['senha'];
 
-    $conexao = novaConexao();
+  $conexao = novaConexao();
 
-    // Busca o usuário pelo e-mail
-    $stmt = $conexao->prepare("SELECT id_cliente, cli_senha FROM tbl_cliente WHERE cli_email = ?");
-    $stmt->execute([$email]);
+  // Busca o usuário pelo e-mail
+  $stmt = $conexao->prepare("SELECT id_cliente, cli_senha FROM tbl_cliente WHERE cli_email = ?");
+  $stmt->execute([$email]);
 
-    if ($stmt->rowCount() > 0) {
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+  if ($stmt->rowCount() > 0) {
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Verifica se a senha hashada bate com a senha fornecida
-        if ($senha = $usuario['cli_senha']) {
-            // Senha correta, inicia a sessão
-            $_SESSION['idcliente'] = $usuario['id_cliente'];
-            header('Location: ../index.php'); // Redireciona para a página inicial
-            exit;
-        } else {
-          echo "<script>alert('A senha está incorreta');</script>";
-        }
+    // Verifica se a senha hashada bate com a senha fornecida
+    if ($senha = $usuario['cli_senha']) {
+      // Senha correta, inicia a sessão
+      $_SESSION['idcliente'] = $usuario['id_cliente'];
+      header('Location: ../index.php'); // Redireciona para a página inicial
+      exit;
     } else {
-        echo "<script>alert('Usuário não encontrado!')</script>";
+      $loginErro = true;
     }
+  } else {
+    $loginErro = true;
+  }
 }
 ?>
 
@@ -51,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-  <section id="content" class="container" >
+  <section id="content" class="container">
 
     <div class="image-section">
       <div class="image-wrapper">
@@ -71,6 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <p>Insira suas credenciais para acessar sua conta.</p>
         <form method="post">
           <div class="input-container">
+            <?php if ($loginErro): ?>
+              <div class="alert">
+                Usuário ou senha incorretos, burro. Tente novamente!
+              </div>
+            <?php endif; ?>
             <div class="form-group">
               <label for="email">Email</label>
               <input name="email" type="email" id="email" autocomplete="off">
@@ -94,20 +101,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
   </section>
+
   <script>
-    function mudaImagem(){
+    function mudaImagem() {
       let imagem = document.getElementById('logImg')
-      if(window.innerWidth <= 800){
+      if (window.innerWidth <= 800) {
         imagem.src = '../img/logoJGMsm.png'
-      }else(
+      } else(
         imagem.src = '../img/logoJGM.png'
       )
-      window.onload =mudaImagem;
+      window.onload = mudaImagem;
       window.onresize = mudaImagem;
     }
-    
-    
-
   </script>
 </body>
 

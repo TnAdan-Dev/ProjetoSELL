@@ -6,15 +6,15 @@ if (isset($_SESSION['idcliente'])) {
 } 
 include '../backend/conexao.php';
 
-// Função para formatar CPF
+  $loginErro = false;
 function formatarCPF($cpf) {
-    $cpf = preg_replace("/[^0-9]/", "", $cpf); // Remove qualquer caractere que não seja número
+    $cpf = preg_replace("/[^0-9]/", "", $cpf); 
     return substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2);
 }
 
-// Função para formatar Telefone
+
 function formatarTelefone($telefone) {
-    $telefone = preg_replace("/[^0-9]/", "", $telefone); // Remove qualquer caractere que não seja número
+    $telefone = preg_replace("/[^0-9]/", "", $telefone); 
     return '(' . substr($telefone, 0, 2) . ')' . substr($telefone, 2, 5) . '-' . substr($telefone, 7);
 }
 
@@ -23,22 +23,22 @@ if (count($_POST) > 0) {
     $email = $_POST['email'];
     $cpf = formatarCPF($_POST['cpf']);
     $telefone = formatarTelefone($_POST['telefone']);
-    $datanasc = $_POST['datanasc']; // Formato esperado: aaaa-mm-dd
+    $datanasc = $_POST['datanasc']; 
     $senha = $_POST['senha'];
     $passwordconfirm = $_POST['passwordconfirm'];
-    $data_cadastro = date('Y-m-d'); // Data atual no formato aaaa-mm-dd
+    $data_cadastro = date('Y-m-d'); 
 
     $conexao = novaConexao();
 
-    // Verifica se o e-mail ou CPF já existem
+    
     $stmt = $conexao->prepare("SELECT * FROM tbl_cliente WHERE cli_email = ? OR cli_cpf = ?");
     $stmt->execute([$email, $cpf]);
     if ($stmt->rowCount() > 0) {
-      echo "<script>alert('Email ou CPF ja cadastrados'); window.location.href='cadastro.php';</script>";
+      $LoginErro = "O Email ja está cadastrado!";
     } elseif ($senha !== $passwordconfirm) {
-      echo "<script>alert('As senhas não coincidem'); window.location.href='cadastro.php';</script>";
+      echo "As senhas não coincidem!";
     } else {
-        // Insere os dados no banco
+        
         $stmt = $conexao->prepare("INSERT INTO tbl_cliente (cli_nome, cli_email, cli_cpf, cli_telefone, cli_dt_cadastro, cli_dt_nascimento, cli_senha) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$nome, $email, $cpf, $telefone, $data_cadastro, $datanasc, $senha]);
         $_SESSION['idcliente'] = $conexao->lastInsertId(); 
@@ -50,7 +50,6 @@ if (count($_POST) > 0) {
 
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -80,6 +79,11 @@ if (count($_POST) > 0) {
         <h2>Cadastro</h2>  
         <form method="post">
           <div class="input-container">
+          <?php if ($loginErro != false): ?>
+              <div class="alert">
+                <?= $loginErro ?>
+              </div>
+            <?php endif; ?>
           <div class="form-group">
               <label for="nome">Nome</label>
               <input required name="nome" type="text" id="nome" autocomplete="off">

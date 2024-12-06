@@ -1,5 +1,5 @@
 
-    <footer class="footer bg-base-200 text-base-900 p-10 border-t-2 mt-6">
+    <footer class="footer bg-base-200 text-base-900 p-10 border-t-2 mt-6 transition-all duration-300">
         <aside>
             <svg
                 width="50"
