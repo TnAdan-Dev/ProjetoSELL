@@ -38,7 +38,7 @@
                 </a>
             </li>
             <li class="mb-1 group">
-                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
+                <a href="../../index.php" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
                     <i class="ri-settings-2-line mr-3 text-lg"></i>
                     <span class="text-sm">Sair</span>
                 </a>
@@ -80,7 +80,46 @@
                 </div>
             </div>
         </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 py-6">
+            <a href="adicionar-produto.php" class="card shadow-xl hover:shadow-2xl transition-shadow bg-white border border-gray-200 rounded-lg p-6 hover:bg-blue-50">
+                <div class="flex flex-col items-center">
+                    <div class="icon bg-blue-100 text-blue-500 rounded-full p-4 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg">Adicionar Produto</h3>
+                    <p class="text-sm text-gray-500 mt-2 text-center">Clique aqui para adicionar novos produtos ao sistema.</p>
+                </div>
+            </a>
+
+            <a href="editar-produto.php" class="card shadow-xl hover:shadow-2xl transition-shadow bg-white border border-gray-200 rounded-lg p-6 hover:bg-yellow-50">
+                <div class="flex flex-col items-center">
+                    <div class="icon bg-yellow-100 text-yellow-500 rounded-full p-4 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-4-4m0 0l4-4m-4 4h12" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg">Editar Produto</h3>
+                    <p class="text-sm text-gray-500 mt-2 text-center">Clique aqui para editar produtos já cadastrados.</p>
+                </div>
+            </a>
+
+            <a href="apagar-produto.php" class="card shadow-xl hover:shadow-2xl transition-shadow bg-white border border-gray-200 rounded-lg p-6 hover:bg-red-50">
+                <div class="flex flex-col items-center">
+                    <div class="icon bg-red-100 text-red-500 rounded-full p-4 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg">Apagar Produto</h3>
+                    <p class="text-sm text-gray-500 mt-2 text-center">Clique aqui para apagar produtos do sistema.</p>
+                </div>
+            </a>
+        </div>
+
     </main>
+
 
 
     <script src="https://unpkg.com/@popperjs/core@2"></script>

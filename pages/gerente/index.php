@@ -46,9 +46,9 @@
         </ul>
     </div>
     <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
-    <!-- end: Sidebar -->
+    <!-- Sidebar -->
 
-    <!-- start: Main -->
+    <!-- Main -->
     <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-50 min-h-screen transition-all main">
         <div class="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
             <button type="button" class="text-lg text-gray-600 sidebar-toggle">
@@ -131,10 +131,11 @@
                 </div>
             </div>
 
+            <!-- Seu HTML para estatísticas de vendas -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md lg:col-span-2">
                     <div class="flex justify-between mb-4 items-start">
-                        <div class="font-medium">Estatisticas de Venda</div>
+                        <div class="font-medium">Estatísticas de Venda</div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                         <div class="rounded-md border border-dashed border-gray-200 p-4">
@@ -160,17 +161,68 @@
                         </div>
                     </div>
                     <div>
-                        <canvas id="order-chart"></canvas>
+                        <canvas id="order-line-chart"></canvas>
                     </div>
                 </div>
-
             </div>
+
+
+
         </div>
     </main>
 
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../js/gerente.js"></script>
+    <script>
+        const ctx = document.getElementById('order-line-chart').getContext('2d');
+        const orderLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                datasets: [{
+                    label: 'Vendas (R$)',
+                    data: [80, 100, 120, 150, 130, 200, 180],
+                    fill: false,
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    tension: 0.3,
+                    pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                    pointBorderColor: '#ffffff',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Dias da Semana',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Valor em R$',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

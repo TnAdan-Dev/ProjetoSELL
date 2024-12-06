@@ -173,7 +173,7 @@ $produtosAleatorios = $stmtAleatorios->fetchAll(PDO::FETCH_ASSOC);
                                 <h2 class="card-title text-base-800"><?= $produto['pro_nome'] ?></h2>
                                 <p><?= $produto['pro_preco'] ?></p>
                                 <div class="card-actions justify-end">
-                                    <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 text-white hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+                                    <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 text-white hover:text-black border-none w-full rounded-3xl p-1 m-1">Veja!</button>
                                 </div>
                             </div>
                         </div>
