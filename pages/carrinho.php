@@ -16,9 +16,9 @@ $conn = novaConexao();
 // Exibe o ID para fins de depuração
 //     echo "O ID do produto é: " . $idProduto;
 
-//     // Prepara a consulta para pegar o produto do banco de dados
 
-$query = "
+
+$queryCarrinho = "
     SELECT p.* 
     FROM tbl_produto p
     JOIN tbl_detalhe_carrinho dc ON dc.det_id_produto = p.id_produto
@@ -29,72 +29,62 @@ $query = "
         LIMIT 1
     )
 ";
-$stmt = $conn->prepare($query);
-$stmt->bindValue(':idcliente', $_SESSION['idcliente'], PDO::PARAM_INT);
-$stmt->execute();
+$stmtCarrinho = $conn->prepare($queryCarrinho);
+$stmtCarrinho->bindValue(':idcliente', $_SESSION['idcliente'], PDO::PARAM_INT);
+$stmtCarrinho->execute();
 
-// Obtendo os resultados
-$produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$produtosCarrinho = $stmtCarrinho->fetchAll(PDO::FETCH_ASSOC);
 
-
-$query = "SELECT id_produto, pro_nome, pro_preco FROM tbl_produto ORDER BY RAND() LIMIT :quantidade";
-$stmt = $conn->prepare($query);
-
-
+$queryAleatorios = "SELECT id_produto, pro_nome, pro_preco FROM tbl_produto ORDER BY RAND() LIMIT :quantidade";
+$stmtAleatorios = $conn->prepare($queryAleatorios);
 $quantidade = 5;
-$stmt->bindValue(':quantidade', $quantidade, PDO::PARAM_INT);
+$stmtAleatorios->bindValue(':quantidade', $quantidade, PDO::PARAM_INT);
+$stmtAleatorios->execute();
 
-$stmt->execute();
 
-$produtos = [];
+$produtosAleatorios = $stmtAleatorios->fetchAll(PDO::FETCH_ASSOC);
 
-if ($stmt->rowCount() > 0) {
-    while ($produto = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $produtos[] = [
-            'id' => $produto['id_produto'],
-            'nome' => $produto['pro_nome'],
-            'preco' => $produto['pro_preco']
-        ];
-    }
-} else {
-    echo "<p>Nenhum produto disponível.</p>";
-}
+
+
+
+
+
 
 // Exibindo os resultados
 // if ($produtos) {
-//     foreach ($produtos as $produto) {
-//         echo "Nome do Produto: " . $produto['pro_nome'] . "<br>";
-//         echo "Preço: " . $produto['pro_preco'] . "<br>";
-//         echo "Descrição: " . $produto['pro_marca'] . "<br>";
-//         // Você pode adicionar mais campos do produto aqui, conforme necessário
-//     }
+// foreach ($produtos as $produto) {
+// echo "Nome do Produto: " . $produto['pro_nome'] . "<br>";
+// echo "Preço: " . $produto['pro_preco'] . "<br>";
+// echo "Descrição: " . $produto['pro_marca'] . "<br>";
+// // Você pode adicionar mais campos do produto aqui, conforme necessário
+// }
 // } else {
-//     echo "Nenhum produto encontrado no carrinho.";
+// echo "Nenhum produto encontrado no carrinho.";
 // }
 
-//     // Busca o produto do banco de dados
-//     $produto = $stmt->fetch(PDO::FETCH_ASSOC);
+// // Busca o produto do banco de dados
+// $produto = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//     // Verifica se o produto foi encontrado
-//     if ($produto) {
-//         // Armazena cada campo da tabela em uma variável
-//         $nomeProduto = $produto['pro_nome'];
-//         $precoProduto = $produto['pro_preco'];
-//         $descricaoProduto = $produto['pro_descricao'];
-//         $estoqueProduto = $produto['pro_estoque'];
-//         $categoriaProduto = $produto['pro_categoria'];
+// // Verifica se o produto foi encontrado
+// if ($produto) {
+// // Armazena cada campo da tabela em uma variável
+// $nomeProduto = $produto['pro_nome'];
+// $precoProduto = $produto['pro_preco'];
+// $descricaoProduto = $produto['pro_descricao'];
+// $estoqueProduto = $produto['pro_estoque'];
+// $categoriaProduto = $produto['pro_categoria'];
 
-//         // Exemplo de exibição das variáveis (ou use conforme necessário no código)
-//         echo "<h1>Nome: $nomeProduto</h1>";
-//         echo "<p>Preço: R$ " . number_format($precoProduto, 2, ',', '.') . "</p>";
-//         echo "<p>Descrição: $descricaoProduto</p>";
-//         echo "<p>Estoque disponível: $estoqueProduto unidades</p>";
-//         echo "<p>Categoria: $categoriaProduto</p>";
-//     } else {
-//         echo "Produto não encontrado.";
-//     }
+// // Exemplo de exibição das variáveis (ou use conforme necessário no código)
+// echo "<h1>Nome: $nomeProduto</h1>";
+// echo "<p>Preço: R$ " . number_format($precoProduto, 2, ',', '.') . "</p>";
+// echo "<p>Descrição: $descricaoProduto</p>";
+// echo "<p>Estoque disponível: $estoqueProduto unidades</p>";
+// echo "<p>Categoria: $categoriaProduto</p>";
 // } else {
-//     echo "Nenhum ID de produto foi fornecido.";
+// echo "Produto não encontrado.";
+// }
+// } else {
+// echo "Nenhum ID de produto foi fornecido.";
 // }
 
 
@@ -122,8 +112,8 @@ if ($stmt->rowCount() > 0) {
             <div class="w-full md:w-2/3 p-4">
                 <h2 class="text-2xl font-bold mb-5">Seu Carrinho</h2>
 
-                <?php if ($produtos) {
-                    foreach ($produtos as $produto) {
+                <?php if ($produtosCarrinho) {
+                    foreach ($produtosCarrinho as $produto) {
                 ?>
                         <div class="flex items-start mb-4 border-2 p-3 shadow-xl rounded-xl">
                             <img src="../img/camisetaTeste.webp" alt="Basic Tee Sienna" class="w-24 h-24 mr-4">
@@ -173,28 +163,22 @@ if ($stmt->rowCount() > 0) {
         <h1 class="text-myprimary font-bold text-3xl">Produtos Populares</h1>
         <div class="overflow-x-auto p-10">
             <div class="flex space-x-16 min-w-max ">
-                <div class="container mx-auto px-4 py-6 ">
-                    <h1 class="text-myprimary font-bold text-3xl">Produtos Populares</h1>
-                    <div class="overflow-x-auto p-10">
-                        <div class="flex space-x-16 min-w-max ">
-                            <?php foreach ($produtos as $produto) { ?>
-                                <div class="card w-64 bg-base-100 shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border  ">
-                                    <figure>
-                                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-                                    </figure>
-                                    <div class="card-body text-black">
-                                        <h2 class="card-title text-base-800"><?= $produto['nome'] ?></h2>
-                                        <p><?= $produto['preco'] ?></p>
-                                        <div class="card-actions justify-end">
-                                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 text-white hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-                                        </div>
-                                    </div>
+                <?php if ($produtosAleatorios) {
+                    foreach ($produtosAleatorios as $produto) { ?>
+                        <div class="card w-64 bg-base-100 shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border  ">
+                            <figure>
+                                <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
+                            </figure>
+                            <div class="card-body text-black">
+                                <h2 class="card-title text-base-800"><?= $produto['pro_nome'] ?></h2>
+                                <p><?= $produto['pro_preco'] ?></p>
+                                <div class="card-actions justify-end">
+                                    <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 text-white hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
                                 </div>
-                            <?php } ?>
-
+                            </div>
                         </div>
-                    </div>
-                </div>
+                <?php }
+                } ?>
             </div>
         </div>
     </div>
