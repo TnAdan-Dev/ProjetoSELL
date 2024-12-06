@@ -4,14 +4,12 @@ include '../backend/conexao.php';
 
 $conn = novaConexao();
 
-// Número de produtos por página
 $produtosPorPagina = 8;
 
-// Página atual (verifica se foi passado um número de página na URL, se não, usa a página 1)
 $paginaAtual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $inicio = ($paginaAtual - 1) * $produtosPorPagina;
 
-// Consulta para buscar os produtos com limite
+
 $query = "SELECT * FROM tbl_produto LIMIT :inicio, :quantidade";
 $stmt = $conn->prepare($query);
 $stmt->bindValue(':inicio', $inicio, PDO::PARAM_INT);
@@ -32,14 +30,12 @@ if ($stmt->rowCount() > 0) {
     echo "<p>Nenhum produto disponível.</p>";
 }
 
-// Conta o total de produtos
+
 $queryTotal = "SELECT COUNT(*) AS total FROM tbl_produto";
 $totalProdutos = $conn->query($queryTotal)->fetch(PDO::FETCH_ASSOC)['total'];
 
-// Calcula o número total de páginas
 $totalPaginas = ceil($totalProdutos / $produtosPorPagina);
 
-// Fecha a conexão
 $conn = null;
 ?>
 

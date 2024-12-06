@@ -36,6 +36,30 @@ $stmt->execute();
 // Obtendo os resultados
 $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+$query = "SELECT id_produto, pro_nome, pro_preco FROM tbl_produto ORDER BY RAND() LIMIT :quantidade";
+$stmt = $conn->prepare($query);
+
+
+$quantidade = 5;
+$stmt->bindValue(':quantidade', $quantidade, PDO::PARAM_INT);
+
+$stmt->execute();
+
+$produtos = [];
+
+if ($stmt->rowCount() > 0) {
+    while ($produto = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $produtos[] = [
+            'id' => $produto['id_produto'],
+            'nome' => $produto['pro_nome'],
+            'preco' => $produto['pro_preco']
+        ];
+    }
+} else {
+    echo "<p>Nenhum produto disponível.</p>";
+}
+
 // Exibindo os resultados
 // if ($produtos) {
 //     foreach ($produtos as $produto) {
@@ -149,63 +173,25 @@ $produtos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h1 class="text-myprimary font-bold text-3xl">Produtos Populares</h1>
         <div class="overflow-x-auto p-10">
             <div class="flex space-x-16 min-w-max ">
-                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border  ">
-                    <figure>
-                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-                    </figure>
-                    <div class="card-body text-black">
-                        <h2 class="card-title text-black">Item</h2>
-                        <p>Descrição/preço do item</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn bg-myprimary hover:bg-mysecondary text-white hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
-                    <figure>
-                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-                    </figure>
-                    <div class="card-body text-black">
-                        <h2 class="card-title text-black">Item</h2>
-                        <p>Descrição/preço do item</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
-                    <figure>
-                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-                    </figure>
-                    <div class="card-body text-black">
-                        <h2 class="card-title text-black">Item</h2>
-                        <p>Descrição/preço do item</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
-                    <figure>
-                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-                    </figure>
-                    <div class="card-body text-black">
-                        <h2 class="card-title text-black">Item</h2>
-                        <p>Descrição/preço do item</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
-                    <figure>
-                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-                    </figure>
-                    <div class="card-body text-black">
-                        <h2 class="card-title text-black">Item</h2>
-                        <p>Descrição/preço do item</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+                <div class="container mx-auto px-4 py-6 ">
+                    <h1 class="text-myprimary font-bold text-3xl">Produtos Populares</h1>
+                    <div class="overflow-x-auto p-10">
+                        <div class="flex space-x-16 min-w-max ">
+                            <?php foreach ($produtos as $produto) { ?>
+                                <div class="card w-64 bg-base-100 shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border  ">
+                                    <figure>
+                                        <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
+                                    </figure>
+                                    <div class="card-body text-black">
+                                        <h2 class="card-title text-base-800"><?= $produto['nome'] ?></h2>
+                                        <p><?= $produto['preco'] ?></p>
+                                        <div class="card-actions justify-end">
+                                            <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 text-white hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+
                         </div>
                     </div>
                 </div>

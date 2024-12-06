@@ -6,7 +6,35 @@ $base_url = rtrim($base_url, '/pages/aliancas');
 
 
 $clienteLogado = isset($_SESSION['idcliente']);
+
+require 'backend/conexao.php'; 
+$conn = novaConexao();
+
+$query = "SELECT id_produto, pro_nome, pro_preco FROM tbl_produto ORDER BY RAND() LIMIT :quantidade";
+$stmt = $conn->prepare($query);
+
+
+$quantidade = 5;
+$stmt->bindValue(':quantidade', $quantidade, PDO::PARAM_INT);
+
+$stmt->execute();
+
+$produtos = [];
+
+if ($stmt->rowCount() > 0) {
+    while ($produto = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $produtos[] = [
+            'id' => $produto['id_produto'],
+            'nome' => $produto['pro_nome'],
+            'preco' => $produto['pro_preco']
+        ];
+    }
+} else {
+    echo "<p>Nenhum produto disponível.</p>";
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br" class="!scroll-smooth">
 
@@ -18,13 +46,13 @@ $clienteLogado = isset($_SESSION['idcliente']);
   <link rel="icon" href="img/iconJGM.png">
 </head>
 
-<body class="bg-white scroll-smooth">
+<body class="bg-base-100 scroll-smooth">
 
   <?php
   require_once 'utils/navbar.php';
   ?>
 
-  <div class="carousel w-full bg-white">
+  <div class="carousel w-full bg-base-100">
     <div id="slide1" class="carousel-item relative w-full">
       <img
         src="img/banner 2.png"
@@ -63,36 +91,36 @@ $clienteLogado = isset($_SESSION['idcliente']);
     </div>
   </div>
 
-  <div class="bg-white border-b-2 ">
+  <div class="bg-base-100 border-b-2 ">
     <div class="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
       <div>
         <h2 class="text-3xl font-bold tracking-tight text-myprimary sm:text-4xl">Joyce Galvão Modas</h2>
-        <p class="mt-4 text-gray-500">Estilo e sofisticação entregues na sua porta em Aparecida e região. Descubra as últimas tendências e transforme seu guarda-roupa com nossa seleção!</p>
+        <p class="mt-4 text-base-500">Estilo e sofisticação entregues na sua porta em Aparecida e região. Descubra as últimas tendências e transforme seu guarda-roupa com nossa seleção!</p>
 
         <dl class="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Lorem</dt>
-            <dd class="mt-2 text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
+            <dt class="font-medium text-base-900">Lorem</dt>
+            <dd class="mt-2 text-sm text-base-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
           </div>
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Lorem</dt>
-            <dd class="mt-2 text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
+            <dt class="font-medium text-base-900">Lorem</dt>
+            <dd class="mt-2 text-sm text-base-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
           </div>
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Lorem</dt>
-            <dd class="mt-2 text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
+            <dt class="font-medium text-base-900">Lorem</dt>
+            <dd class="mt-2 text-sm text-base-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
           </div>
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Lorem</dt>
-            <dd class="mt-2 text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
+            <dt class="font-medium text-base-900">Lorem</dt>
+            <dd class="mt-2 text-sm text-base-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
           </div>
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Lorem</dt>
-            <dd class="mt-2 text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
+            <dt class="font-medium text-base-900">Lorem</dt>
+            <dd class="mt-2 text-sm text-base-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
           </div>
           <div class="border-t border-gray-200 pt-4">
-            <dt class="font-medium text-gray-900">Lorem</dt>
-            <dd class="mt-2 text-sm text-gray-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
+            <dt class="font-medium text-base-900">Lorem</dt>
+            <dd class="mt-2 text-sm text-base-500">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam, atque!</dd>
           </div>
         </dl>
       </div>
@@ -105,75 +133,28 @@ $clienteLogado = isset($_SESSION['idcliente']);
     </div>
   </div>
 
-  <div class="container mx-auto px-4 py-6">
-  <h1 class="text-myprimary font-bold text-3xl">Produtos Populares</h1>
+  <div class="container mx-auto px-4 py-6 ">
+    <h1 class="text-myprimary font-bold text-3xl">Produtos Populares</h1>
     <div class="overflow-x-auto p-10">
       <div class="flex space-x-16 min-w-max ">
-        <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border  ">
+        <?php foreach ($produtos as $produto) { ?>
+        <div class="card w-64 bg-base-100 shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 border  ">
           <figure>
             <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
           </figure>
           <div class="card-body text-black">
-            <h2 class="card-title text-black">Item</h2>
-            <p>Descrição/preço do item</p>
+            <h2 class="card-title text-base-800"><?= $produto['nome'] ?></h2>
+            <p><?= $produto['preco'] ?></p>
             <div class="card-actions justify-end">
-              <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
+              <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 text-white hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
             </div>
           </div>
         </div>
-        <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
-          <figure>
-            <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-          </figure>
-          <div class="card-body text-black">
-            <h2 class="card-title text-black">Item</h2>
-            <p>Descrição/preço do item</p>
-            <div class="card-actions justify-end">
-              <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-            </div>
-          </div>
-        </div>
-        <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
-          <figure>
-            <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-          </figure>
-          <div class="card-body text-black">
-            <h2 class="card-title text-black">Item</h2>
-            <p>Descrição/preço do item</p>
-            <div class="card-actions justify-end">
-              <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-            </div>
-          </div>
-        </div>
-        <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
-          <figure>
-            <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-          </figure>
-          <div class="card-body text-black">
-            <h2 class="card-title text-black">Item</h2>
-            <p>Descrição/preço do item</p>
-            <div class="card-actions justify-end">
-              <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-            </div>
-          </div>
-        </div>
-        <div class="card w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105">
-          <figure>
-            <img src="https://via.placeholder.com/256" alt="Imagem do Card" class="w-full h-32 object-cover rounded-t-lg">
-          </figure>
-          <div class="card-body text-black">
-            <h2 class="card-title text-black">Item</h2>
-            <p>Descrição/preço do item</p>
-            <div class="card-actions justify-end">
-              <button class="btn bg-myprimary hover:bg-myprimary hover:opacity-90 hover:text-black border-none w-full rounded-3xl p-1 m-1">Ação</button>
-            </div>
-          </div>
-        </div>
+        <?php } ?>
+
       </div>
     </div>
   </div>
-
-  <div class="opacity-0 animate-fade-in">Conteúdo carregado!</div>
 
   <?php
 

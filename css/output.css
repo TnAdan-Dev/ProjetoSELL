@@ -8136,3 +8136,10 @@ details.collapse summary::-webkit-details-marker {
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  .dark\:text-mysecondary {
+    --tw-text-opacity: 1;
+    color: rgb(210 156 154 / var(--tw-text-opacity));
+  }
+}
+

@@ -42,8 +42,7 @@ if (count($_POST) > 0) {
         $stmt = $conexao->prepare("INSERT INTO tbl_cliente (cli_nome, cli_email, cli_cpf, cli_telefone, cli_dt_cadastro, cli_dt_nascimento, cli_senha) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$nome, $email, $cpf, $telefone, $data_cadastro, $datanasc, $senha]);
         $_SESSION['idcliente'] = $conexao->lastInsertId(); 
-        echo "<script>alert('Usuario cadastrado!'); window.location.href='../index.php';</script>";
-
+        echo "<script>alert('Usuario cadastrado!'); window.location.href='../index.php'; </script>";
     }
 }
 ?>
