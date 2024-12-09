@@ -85,7 +85,7 @@
         </div>
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 transition-all duration-300 hover:scale-105">
                     <div class="flex justify-between mb-6">
                         <div>
                             <div class="text-2xl font-semibold mb-1">10</div>
@@ -102,7 +102,7 @@
                         <span class="text-sm font-medium text-gray-600 ml-4">60%</span>
                     </div>
                 </div>
-                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 transition-all duration-300 hover:scale-105">
                     <div class="flex justify-between mb-4">
                         <div>
                             <div class="flex items-center mb-1">
@@ -120,18 +120,16 @@
                         <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded-full object-cover block -ml-3">
                     </div>
                 </div>
-                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
+                <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 transition-all duration-300 hover:scale-105">
                     <div class="flex justify-between mb-6">
                         <div>
                             <div class="text-2xl font-semibold mb-1"><span class="text-base font-normal text-gray-400 align-top">R$</span>2,345</div>
                             <div class="text-sm font-medium text-gray-400">Lucro Liquido</div>
                         </div>
                     </div>
-                    <a href="#" class="text-blue-500 font-medium text-sm hover:text-blue-600">Ver detalhes</a>
                 </div>
             </div>
 
-            <!-- Seu HTML para estatísticas de vendas -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md lg:col-span-2">
                     <div class="flex justify-between mb-4 items-start">

@@ -11,8 +11,6 @@ function formatarCPF($cpf) {
     $cpf = preg_replace("/[^0-9]/", "", $cpf); 
     return substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2);
 }
-
-
 function formatarTelefone($telefone) {
     $telefone = preg_replace("/[^0-9]/", "", $telefone); 
     return '(' . substr($telefone, 0, 2) . ')' . substr($telefone, 2, 5) . '-' . substr($telefone, 7);
@@ -60,7 +58,6 @@ if (count($_POST) > 0) {
 
 <body>
   <section class="container">
-
     <div class="image-section">
       <div class="image-wrapper">
         <img src="../img/roupas.jpg" alt="" id="">
@@ -72,7 +69,6 @@ if (count($_POST) > 0) {
     </div>
 
     <div class="form-section">
-
       <div class="form-wrapper">
 
         <h2>Cadastro</h2>  

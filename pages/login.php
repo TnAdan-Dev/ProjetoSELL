@@ -15,18 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $conexao = novaConexao();
 
-  // Busca o usuário pelo e-mail
-  $stmt = $conexao->prepare("SELECT id_cliente, cli_senha FROM tbl_cliente WHERE cli_email = ?");
+  $stmt = $conexao->prepare("SELECT * FROM tbl_cliente WHERE cli_email = ?");
   $stmt->execute([$email]);
 
   if ($stmt->rowCount() > 0) {
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Verifica se a senha hashada bate com a senha fornecida
     if ($senha = $usuario['cli_senha']) {
-      // Senha correta, inicia a sessão
       $_SESSION['idcliente'] = $usuario['id_cliente'];
-      header('Location: ../index.php'); // Redireciona para a página inicial
+      $_SESSION['clientenome'] = $usuario['cli_nome'];
+      $_SESSION['clienteemail'] = $usuario['cli_email'];
+      $_SESSION['clientetelefone'] = $usuario['cli_telefone'];
+      $_SESSION['clientedtnascimento'] = $usuario['cli_dt_nascimento'];
+      $_SESSION['clienteindereco'] = $usuario['cli_id_endereco'];
+      header('Location: ../index.php'); 
       exit;
     } else {
       $loginErro = true;
